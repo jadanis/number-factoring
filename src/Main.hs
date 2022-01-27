@@ -1,5 +1,5 @@
 import UserInteract (getBool, getInt)
-import FactorInt (showFactor)
+import IntFactor (showFactor)
 
 main :: IO ()
 main = factorInt >> continue
