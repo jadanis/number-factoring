@@ -5,16 +5,7 @@ module UserInteract
 where
 
 import Control.Exception (IOException, catch)
-
-getInt :: IO Int
-getInt = getTypeLoop getInt' "Please enter a positive integer: " "Looks like you did not enter a positive integer. Try again: "
-
-getInt' :: IO Int
-getInt' = do
-  n :: Int <- readLn
-  case compare n 0 of
-    GT -> return n
-    _ -> ioError (userError "Must be a positive integer")
+import Data.Char (toLower,toUpper)
 
 getInt :: IO Int
 getInt = getTypeLoop getInt' "Please enter a positive integer: "
@@ -30,8 +21,23 @@ getBool :: IO Bool
 getBool = getTypeLoop getBool' "Please enter True or False?"
 
 getBool' :: IO Bool
-getBool' = readLn
+getBool' = do
+  s <- getLine
+  let mbool = tryBool s
+  case mbool of
+    Just b -> return b
+    Nothing -> ioError (userError "Could not deduce boolean")
 
+tryBool :: String -> Maybe Bool
+tryBool s 
+  | s' == "True" || s' == "T" || s' == "Y" || s' == "Yes" = Just True
+  | s' == "False" || s' == "F" || s' == "N" || s' == "No" = Just False
+  | otherwise = Nothing
+  where s' = capitalized s
+
+capitalized :: String -> String
+capitalized (head:tail) = toUpper head : map toLower tail
+capitalized [] = []
 
 getTypeLoop :: Read a => IO a -> String -> IO a
 getTypeLoop getter init_msg = catch initGet handler
