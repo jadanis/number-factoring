@@ -26,7 +26,12 @@ factor' n (p:ps) rs =
     _ -> factor' n ps rs
 
 prime_sieve :: Int -> [Int]
-prime_sieve n = (prime_sieve' [3,5..n] []) ++ [2]
+prime_sieve n
+  | n < 2 = []
+  | n == 2 = [2]
+  | n <= 4 = [3,2]
+  | n <= 6 = [5,3,2]
+  | otherwise = (prime_sieve' [3,5..n] []) ++ [2]
 
 prime_sieve' :: [Int] -> [Int] -> [Int]
 prime_sieve' [] rs = rs
