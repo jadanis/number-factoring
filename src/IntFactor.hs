@@ -1,7 +1,7 @@
 module IntFactor
 ( showFactor
 , factor
-, prime_sieve
+, sieve
 ) where
 
 import Data.List (group, intercalate)
